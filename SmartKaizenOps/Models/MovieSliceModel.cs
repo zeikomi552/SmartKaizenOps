@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace SmartKaizenOps.Models
 {
     public class MovieSliceModel : BindableBase
     {
+        [XmlIgnore]
         public MovieSliceCollectionModel? Parent { get; set; }
 
         #region 要素作業名

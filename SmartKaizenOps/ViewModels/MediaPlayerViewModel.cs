@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using SmartKaizenOps.Common.Utilities;
 using SmartKaizenOps.Models;
 using System;
 using System.Collections.Generic;
@@ -111,6 +112,51 @@ namespace SmartKaizenOps.ViewModels
         {
             this.MovieControler!.MoviePositionValue
                 = this.MovieControler.MovieSliceItems.SelectedItem.MoviePositionValue;
+        }
+
+        public void FileSave()
+        {
+            try
+            {
+                // ダイアログのインスタンスを生成
+                var dialog = new SaveFileDialog();
+
+                // ファイルの種類を設定
+                dialog.Filter = "テキストファイル (*.skops)|*.skops";
+
+                // ダイアログを表示する
+                if (dialog.ShowDialog() == true)
+                {
+                    XMLUtil.Seialize<MovieControlerModel>(dialog.FileName, MovieControler as MovieControlerModel);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        public void FileLoad()
+        {
+            try
+            {
+                // ダイアログのインスタンスを生成
+                var dialog = new OpenFileDialog();
+
+                // ファイルの種類を設定
+                dialog.Filter = "テキストファイル (*.skops)|*.skops";
+
+                // ダイアログを表示する
+                if (dialog.ShowDialog() == true)
+                {
+                    var tmp = XMLUtil.Deserialize<MovieControlerModel>(dialog.FileName);
+                    this.MovieControler = tmp;
+                }
+            }
+            catch
+            {
+
+            }
         }
     }
 }

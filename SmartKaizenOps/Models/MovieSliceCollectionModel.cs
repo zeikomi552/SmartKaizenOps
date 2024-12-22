@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace SmartKaizenOps.Models
 {
@@ -42,6 +43,7 @@ namespace SmartKaizenOps.Models
         /// <summary>
         /// 選択要素
         /// </summary>
+        [XmlIgnore]
         public MovieSliceModel SelectedItem
         {
             get

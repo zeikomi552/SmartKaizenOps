@@ -36,7 +36,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <MediaElement Name="Media"
+            <MediaElement Margin="5" Name="Media"
                       ScrubbingEnabled="True"
                       Source="{Binding MovieControler.MoviePath}"
                       Loaded="Media_Loaded"
@@ -73,7 +73,11 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Column="1">
-            <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding MovieControler.MovieSliceItems.Items}" SelectedItem="{Binding MovieControler.MovieSliceItems.SelectedItem}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <DataGrid Margin="5,5,5,5" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding MovieControler.MovieSliceItems.Items}" SelectedItem="{Binding MovieControler.MovieSliceItems.SelectedItem}">
                 <b:Interaction.Triggers>
                     <b:EventTrigger EventName="SelectionChanged">
                         <b:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="SelectionChanged"/>
@@ -84,6 +88,22 @@
                     <DataGridTextColumn Header="時間(ミリ秒)" Binding="{Binding MoviePositionValue}"/>
                 </DataGrid.Columns>
             </DataGrid>
+            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                <Button Margin="5" Content="保存">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:CallMethodAction TargetObject="{Binding}" MethodName="FileSave"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+                <Button Margin="5" Content="読込">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:CallMethodAction TargetObject="{Binding}" MethodName="FileLoad"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

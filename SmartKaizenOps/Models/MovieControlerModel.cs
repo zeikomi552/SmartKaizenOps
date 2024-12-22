@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Serialization;
 
 namespace SmartKaizenOps.Models
 {
@@ -90,7 +91,7 @@ namespace SmartKaizenOps.Models
         }
         #endregion
 
-
+        [XmlIgnore]
         public DelegateCommand? ExecuteFileOpenCommand { get; set; }
 
         #region ファイルを開く処理
