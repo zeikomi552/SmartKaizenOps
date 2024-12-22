@@ -13,59 +13,7 @@ namespace SmartKaizenOps.Models
         public MovieControlerModel()
         {
             ExecuteFileOpenCommand = new DelegateCommand(FileOpenExecute, CanExecute);
-            ExecuteMovieCut = new DelegateCommand(MovieCutExecute, CanExecute);
         }
-
-        #region 動画スピード
-        /// <summary>
-        /// 動画スピード
-        /// </summary>
-        double _SpeedRatio = 1;
-        /// <summary>
-        /// 動画スピード
-        /// </summary>
-        public double SpeedRatio
-        {
-            get
-            {
-                return _SpeedRatio;
-            }
-            set
-            {
-                if (!_SpeedRatio.Equals(value))
-                {
-                    _SpeedRatio = value;
-                    RaisePropertyChanged("SpeedRatio");
-                }
-            }
-        }
-        #endregion
-
-        #region 動画位置
-        /// <summary>
-        /// 動画位置
-        /// </summary>
-        TimeSpan _Position = new TimeSpan();
-        /// <summary>
-        /// 動画位置
-        /// </summary>
-        public TimeSpan Position
-        {
-            get
-            {
-                return _Position;
-            }
-            set
-            {
-                if (!_Position.Equals(value))
-                {
-                    _Position = value;
-                    RaisePropertyChanged("Position");
-                }
-            }
-        }
-        #endregion
-
 
         #region 動画のパス
         /// <summary>
@@ -117,11 +65,33 @@ namespace SmartKaizenOps.Models
         }
         #endregion
 
+        #region 動画再生位置
+        /// <summary>
+        /// 動画再生位置
+        /// </summary>
+        double _MoviePositionValue = 0.0;
+        /// <summary>
+        /// 動画再生位置
+        /// </summary>
+        public double MoviePositionValue
+        {
+            get
+            {
+                return _MoviePositionValue;
+            }
+            set
+            {
+                if (!_MoviePositionValue.Equals(value))
+                {
+                    _MoviePositionValue = value;
+                    RaisePropertyChanged("MoviePositionValue");
+                }
+            }
+        }
+        #endregion
+
 
         public DelegateCommand? ExecuteFileOpenCommand { get; set; }
-
-
-        public DelegateCommand? ExecuteMovieCut { get; set; }
 
         #region ファイルを開く処理
         /// <summary>
@@ -155,16 +125,5 @@ namespace SmartKaizenOps.Models
         }
         #endregion
 
-        private void MovieCutExecute()
-        {
-            try
-            {
-                
-            }
-            catch
-            {
-
-            }
-        }
     }
 }

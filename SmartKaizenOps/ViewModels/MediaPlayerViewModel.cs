@@ -92,8 +92,25 @@ namespace SmartKaizenOps.ViewModels
         /// </summary>
         public MediaPlayerViewModel(IMovieControlerModel movie_ctrl)
         {
-            this.MovieControler = movie_ctrl; 
+            this.MovieControler = movie_ctrl;
         }
         #endregion    
+
+        public void MouseRightButtonDown()
+        {
+            this.MovieControler!.MovieSliceItems.Items.Add(new MovieSliceModel()
+            { 
+                Parent = this.MovieControler!.MovieSliceItems,
+                ElementName = "Element",
+                MoviePositionValue = this.MovieControler.MoviePositionValue
+            }
+            );
+        }
+
+        public void SelectionChanged()
+        {
+            this.MovieControler!.MoviePositionValue
+                = this.MovieControler.MovieSliceItems.SelectedItem.MoviePositionValue;
+        }
     }
 }

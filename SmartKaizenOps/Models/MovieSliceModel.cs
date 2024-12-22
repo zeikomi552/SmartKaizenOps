@@ -8,6 +8,8 @@ namespace SmartKaizenOps.Models
 {
     public class MovieSliceModel : BindableBase
     {
+        public MovieSliceCollectionModel? Parent { get; set; }
+
         #region 要素作業名
         /// <summary>
         /// 要素作業名
@@ -33,28 +35,26 @@ namespace SmartKaizenOps.Models
         }
         #endregion
 
-
-
-        #region 開始秒
+        #region 動画再生位置
         /// <summary>
-        /// 開始秒
+        /// 動画再生位置
         /// </summary>
-        decimal _StartSecond = 0;
+        double _MoviePositionValue = 0.0;
         /// <summary>
-        /// 開始秒
+        /// 動画再生位置
         /// </summary>
-        public decimal StartSecond
+        public double MoviePositionValue
         {
             get
             {
-                return _StartSecond;
+                return _MoviePositionValue;
             }
             set
             {
-                if (!_StartSecond.Equals(value))
+                if (!_MoviePositionValue.Equals(value))
                 {
-                    _StartSecond = value;
-                    RaisePropertyChanged("StartSecond");
+                    _MoviePositionValue = value;
+                    RaisePropertyChanged("MoviePositionValue");
                 }
             }
         }
@@ -84,7 +84,5 @@ namespace SmartKaizenOps.Models
             }
         }
         #endregion
-
-
     }
 }

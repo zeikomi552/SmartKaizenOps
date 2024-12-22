@@ -25,40 +25,61 @@
     </UserControl.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <MediaElement Name="Media"
+            <MediaElement Name="Media"
                       ScrubbingEnabled="True"
                       Source="{Binding MovieControler.MoviePath}"
                       Loaded="Media_Loaded"
                       MediaOpened="Media_MediaOpened"
                       MediaEnded="Media_MediaEnded"
                       MouseWheel="Media_MouseWheel"
-                      PreviewMouseLeftButtonDown="Media_PreviewMouseLeftButtonDown"/>
+                      PreviewMouseLeftButtonDown="Media_PreviewMouseLeftButtonDown">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="MouseRightButtonDown">
+                        <b:CallMethodAction TargetObject="{Binding}" MethodName="MouseRightButtonDown"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </MediaElement>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition MinWidth="100" Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Slider Name="SeekSlider" Margin="5,5,5,5"
-                PreviewMouseLeftButtonDown="SeekSlider_PreviewMouseLeftButtonDown" 
-                PreviewMouseLeftButtonUp="SeekSlider_PreviewMouseLeftButtonUp"
-                ValueChanged="SeekSlider_ValueChanged"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="1" Text="{Binding Value, ElementName=SeekSlider}"/>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition MinWidth="100" Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Slider Name="SeekSlider" Margin="5,5,5,5"
+                    PreviewMouseLeftButtonDown="SeekSlider_PreviewMouseLeftButtonDown" 
+                    PreviewMouseLeftButtonUp="SeekSlider_PreviewMouseLeftButtonUp"
+                    Value="{Binding MovieControler.MoviePositionValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    ValueChanged="SeekSlider_ValueChanged"/>
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Text="{Binding Value, ElementName=SeekSlider}"/>
+            </Grid>
+
+            <StackPanel Grid.Row="2" Orientation="Horizontal">
+                <Button Name="OpenButton" Content="Open" Margin="5" Command="{Binding MovieControler.ExecuteFileOpenCommand}" Focusable="False"/>
+                <Button Name="PlayButton" Content="Play" Margin="5" Click="PlayButton_Click" Focusable="False"/>
+                <Button Name="PauseButton" Content="Pause" Margin="5" Click="PauseButton_Click" Focusable="False"/>
+                <Button Name="StopButton" Content="Stop" Margin="5" Click="StopButton_Click" Focusable="False"/>
+                <Slider Name="VolumeSlider" Width="100" Maximum="1" Margin="5" Value="{Binding ElementName=Media, Path=Volume}"/>
+            </StackPanel>
         </Grid>
-
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button Name="OpenButton" Content="Open" Margin="5" Command="{Binding MovieControler.ExecuteFileOpenCommand}" Focusable="False"/>
-            <Button Name="PlayButton" Content="Play" Margin="5" Click="PlayButton_Click" Focusable="False"/>
-            <Button Name="PauseButton" Content="Pause" Margin="5" Click="PauseButton_Click" Focusable="False"/>
-            <Button Name="StopButton" Content="Stop" Margin="5" Click="StopButton_Click" Focusable="False"/>
-            <Slider Name="VolumeSlider" Width="100" Maximum="1" Margin="5" Value="{Binding ElementName=Media, Path=Volume}"/>
-        </StackPanel>
-
+        <Grid Grid.Column="1">
+            <DataGrid ItemsSource="{Binding MovieControler.MovieSliceItems.Items}" SelectedItem="{Binding MovieControler.MovieSliceItems.SelectedItem}">
+                <b:Interaction.Triggers>
+                    <b:EventTrigger EventName="SelectionChanged">
+                        <b:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="SelectionChanged"/>
+                    </b:EventTrigger>
+                </b:Interaction.Triggers>
+            </DataGrid>
+        </Grid>
     </Grid>
 </UserControl>
