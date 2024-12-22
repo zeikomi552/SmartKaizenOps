@@ -7,7 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace SmartKaizenOps.ViewModels
 {
@@ -61,6 +63,30 @@ namespace SmartKaizenOps.ViewModels
         #endregion
 
 
+        #region Properties
+
+        //protected Storyboard TimelineStory
+        //{
+        //    get { return (Storyboard)this.FindResource(nameof(TimelineStory)); }
+        //}
+
+        protected bool IsPlaying
+        {
+            get { return this._Media!.Clock != null && !this.IsPaused && !this.IsStopped; }
+        }
+
+        protected bool IsPaused
+        {
+            get { return this._Media!.Clock != null && this._Media!.Clock.IsPaused; }
+        }
+
+        protected bool IsStopped
+        {
+            get { return this._Media!.Clock == null || this._Media!.Clock.CurrentState.HasFlag(ClockState.Stopped); }
+        }
+
+        #endregion
+
         #region Movie制御クラス
         /// <summary>
         /// Movie制御クラス
@@ -86,6 +112,56 @@ namespace SmartKaizenOps.ViewModels
         }
         #endregion
 
+        #region 動画位置
+        /// <summary>
+        /// 動画位置
+        /// </summary>
+        double _SeekValue = 0.0;
+        /// <summary>
+        /// 動画位置
+        /// </summary>
+        public double SeekValue
+        {
+            get
+            {
+                return _SeekValue;
+            }
+            set
+            {
+                if (!_SeekValue.Equals(value))
+                {
+                    _SeekValue = value;
+                    RaisePropertyChanged("SeekValue");
+                }
+            }
+        }
+        #endregion
+
+        #region 動画位置最大値
+        /// <summary>
+        /// 動画位置最大値
+        /// </summary>
+        double _SeekMaxValue = 0.0;
+        /// <summary>
+        /// 動画位置最大値
+        /// </summary>
+        public double SeekMaxValue
+        {
+            get
+            {
+                return _SeekMaxValue;
+            }
+            set
+            {
+                if (!_SeekMaxValue.Equals(value))
+                {
+                    _SeekMaxValue = value;
+                    RaisePropertyChanged("SeekMaxValue");
+                }
+            }
+        }
+        #endregion
+
         #region コンストラクタ
         /// <summary>
         /// コンストラクタ
@@ -96,8 +172,17 @@ namespace SmartKaizenOps.ViewModels
         }
         #endregion
 
+        Storyboard? _Storyboard;
+
+        public void Timeline_Loaded(object sender, RoutedEventArgs e)
+        {
+            _Storyboard = sender as Storyboard;
+        }
+
         public void Media_Loaded(object sender, RoutedEventArgs e)
         {
+            _Media = sender as MediaElement;
+
             //if (System.ComponentModel.DesignerProperties.GetIsInDesignMode(this))
             //{
             //    return;
@@ -106,10 +191,14 @@ namespace SmartKaizenOps.ViewModels
             //this.Stop();
         }
 
+        MediaElement? _Media;
 
         public void Media_MediaOpened(object sender, EventArgs e)
         {
-            //this.SeekSlider.Maximum = this.Media.NaturalDuration.TimeSpan.TotalMilliseconds;
+            if (_Media != null)
+            {
+                this.SeekMaxValue = _Media.NaturalDuration.TimeSpan.TotalMilliseconds;
+            }
         }
 
         public void Media_MediaEnded(object sender, RoutedEventArgs e)
@@ -204,5 +293,58 @@ namespace SmartKaizenOps.ViewModels
         {
             //this.Stop();
         }
+
+
+        #region Methods
+
+        public void Play()
+        {
+            if (this.IsStopped)
+            {
+                this._Storyboard!.Begin();
+            }
+            if (this.IsPaused)
+            {
+                this._Storyboard!.Resume();
+            }
+        }
+
+        public void Seek(TimeSpan timeSpan)
+        {
+            var value = timeSpan;
+            if (value.TotalMilliseconds < 0)
+            {
+                value = new TimeSpan();
+            }
+            this._Storyboard!.Seek(value);
+        }
+
+        public void Play(TimeSpan position)
+        {
+            this.Seek(position);
+            this.Play();
+        }
+
+        public void Rewind(TimeSpan timeSpan)
+        {
+            this.Seek(TimeSpan.FromMilliseconds(this.SeekValue).Subtract(timeSpan));
+        }
+
+        public void Forward(TimeSpan timeSpan)
+        {
+            this.Seek(TimeSpan.FromMilliseconds(this.SeekValue).Add(timeSpan));
+        }
+
+        public void Pause()
+        {
+            this._Storyboard!.Pause();
+        }
+
+        public void Stop()
+        {
+            this._Storyboard!.Stop();
+        }
+
+        #endregion
     }
 }
