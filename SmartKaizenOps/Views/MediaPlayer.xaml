@@ -10,29 +10,17 @@
              xmlns:Converters="clr-namespace:SmartKaizenOps.Common.Converters" xmlns:b="http://schemas.microsoft.com/xaml/behaviors" x:Class="SmartKaizenOps.Views.MediaPlayer"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type={x:Type vm:MediaPlayerViewModel}}">
+             d:DataContext="{d:DesignInstance Type={x:Type vm:MediaPlayerViewModel}}"
+             PreviewKeyDown="UserControl_PreviewKeyDown">
 
     <UserControl.Resources>
-        <Storyboard x:Key="TimelineStory" x:Name="TimelineStory" SlipBehavior="Slip">
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="Loaded">
-                    <b:CallMethodAction TargetObject="{Binding}" MethodName="Timeline_Loaded"/>
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
-
-
-            <MediaTimeline x:Name="Timeline"
+        <Storyboard x:Key="TimelineStory" Name="TimelineStory" SlipBehavior="Slip">
+            <MediaTimeline Name="Timeline"
                            Source="{Binding MovieControler.MoviePath}"
                            Storyboard.TargetName="Media"
-                           BeginTime="{Binding Position, ElementName=Media}"
-                           Duration="{Binding NaturalDuration, ElementName=Media}">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="CurrentTimeInvalidated">
-                        <b:CallMethodAction TargetObject="{Binding}" MethodName="MediaTimeline_CurrentTimeInvalidated"/>
-                    </b:EventTrigger>
-                    
-                </b:Interaction.Triggers>
-            </MediaTimeline>
+                           BeginTime="{Binding ElementName=Media, Path=Position}"
+                           Duration="{Binding ElementName=Media, Path=NaturalDuration}"
+                           CurrentTimeInvalidated="MediaTimeline_CurrentTimeInvalidated"/>
         </Storyboard>
     </UserControl.Resources>
 
@@ -43,75 +31,25 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <MediaElement x:Name="Media"
+        <MediaElement Name="Media"
                       ScrubbingEnabled="True"
-                      Source="{Binding MovieControler.MoviePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-            <b:Interaction.Triggers>
-                <b:EventTrigger EventName="Loaded">
-                    <b:CallMethodAction TargetObject="{Binding}" MethodName="Media_Loaded"/>
-                </b:EventTrigger>
-                <b:EventTrigger EventName="MediaOpened">
-                    <b:CallMethodAction TargetObject="{Binding}" MethodName="Media_MediaOpened"/>
-                </b:EventTrigger>
-                <b:EventTrigger EventName="MediaEnded">
-                    <b:CallMethodAction TargetObject="{Binding}" MethodName="Media_MediaEnded"/>
-                </b:EventTrigger>
-                <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                    <b:CallMethodAction TargetObject="{Binding}" MethodName="Media_PreviewMouseLeftButtonDown"/>
-                </b:EventTrigger>
-                <b:EventTrigger EventName="MouseWheel">
-                    <b:CallMethodAction TargetObject="{Binding}" MethodName="Media_MouseWheel"/>
-                </b:EventTrigger>
-            </b:Interaction.Triggers>
-        </MediaElement>
+                      Source="{Binding MovieControler.MoviePath}"
+                      Loaded="Media_Loaded"
+                      MediaOpened="Media_MediaOpened"
+                      MediaEnded="Media_MediaEnded"
+                      PreviewMouseLeftButtonDown="Media_PreviewMouseLeftButtonDown"/>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Slider x:Name="SeekSlider" Margin="5,5,5,5" 
-                    Value="{Binding SeekValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Maximum="{Binding SeekMaxValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                        <b:CallMethodAction TargetObject="{Binding}" MethodName="SeekSlider_PreviewMouseLeftButtonDown"/>
-                    </b:EventTrigger>
-                    <b:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                        <b:CallMethodAction TargetObject="{Binding}" MethodName="SeekSlider_PreviewMouseLeftButtonUp"/>
-                    </b:EventTrigger>
-                    <b:EventTrigger EventName="ValueChanged">
-                        <b:CallMethodAction TargetObject="{Binding}" MethodName="SeekSlider_ValueChanged"/>
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-            </Slider>
-            <TextBlock VerticalAlignment="Center" Width="50" Grid.Column="1" 
-                       Text="{Binding SeekValue, Mode=TwoWay, StringFormat=0.0, UpdateSourceTrigger=PropertyChanged}"/>
-        </Grid>
+        <Slider Name="SeekSlider" Grid.Row="1" Margin="5"
+                PreviewMouseLeftButtonDown="SeekSlider_PreviewMouseLeftButtonDown" 
+                PreviewMouseLeftButtonUp="SeekSlider_PreviewMouseLeftButtonUp"
+                ValueChanged="SeekSlider_ValueChanged" />
+
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <Button x:Name="OpenFile" Content="Open" Margin="5" Command="{Binding MovieControler.ExecuteFileOpenCommand}" Focusable="False"/>
-            <Button x:Name="PlayButton" Content="Play" Margin="5" Focusable="False">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="Click">
-                        <b:CallMethodAction TargetObject="{Binding}" MethodName="PlayButton_Click"/>
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-            </Button>
-            <Button x:Name="PauseButton" Content="Pause" Margin="5" Focusable="False">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="Click">
-                        <b:CallMethodAction TargetObject="{Binding}" MethodName="PauseButton_Click"/>
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-            </Button>
-            <Button x:Name="StopButton" Content="Stop" Margin="5" Focusable="False">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="Click">
-                        <b:CallMethodAction TargetObject="{Binding}" MethodName="StopButton_Click"/>
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-            </Button>
-            <Slider x:Name="VolumeSlider" Width="100" Maximum="1" Margin="5" Value="{Binding Volume, ElementName=Media}"/>
+            <Button Name="OpenButton" Content="Open" Margin="5" Command="{Binding MovieControler.ExecuteFileOpenCommand}" Focusable="False"/>
+            <Button Name="PlayButton" Content="Play" Margin="5" Click="PlayButton_Click" Focusable="False"/>
+            <Button Name="PauseButton" Content="Pause" Margin="5" Click="PauseButton_Click" Focusable="False"/>
+            <Button Name="StopButton" Content="Stop" Margin="5" Click="StopButton_Click" Focusable="False"/>
+            <Slider Name="VolumeSlider" Width="100" Maximum="1" Margin="5" Value="{Binding ElementName=Media, Path=Volume}"/>
         </StackPanel>
 
     </Grid>
