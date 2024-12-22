@@ -37,12 +37,20 @@
                       Loaded="Media_Loaded"
                       MediaOpened="Media_MediaOpened"
                       MediaEnded="Media_MediaEnded"
+                      MouseWheel="Media_MouseWheel"
                       PreviewMouseLeftButtonDown="Media_PreviewMouseLeftButtonDown"/>
 
-        <Slider Name="SeekSlider" Grid.Row="1" Margin="5"
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition MinWidth="100" Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Slider Name="SeekSlider" Margin="5,5,5,5"
                 PreviewMouseLeftButtonDown="SeekSlider_PreviewMouseLeftButtonDown" 
                 PreviewMouseLeftButtonUp="SeekSlider_PreviewMouseLeftButtonUp"
-                ValueChanged="SeekSlider_ValueChanged" />
+                ValueChanged="SeekSlider_ValueChanged"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="1" Text="{Binding Value, ElementName=SeekSlider}"/>
+        </Grid>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Button Name="OpenButton" Content="Open" Margin="5" Command="{Binding MovieControler.ExecuteFileOpenCommand}" Focusable="False"/>

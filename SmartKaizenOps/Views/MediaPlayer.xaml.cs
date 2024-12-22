@@ -144,6 +144,25 @@ namespace SmartKaizenOps.Views
             this.SeekSlider.Value = this.Media.Position.TotalMilliseconds;
         }
 
+        private void Media_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (this.IsStopped == false && this.IsPaused)
+            {
+                if (e.Delta > 0)
+                {
+                    SeekSlider.Value += 100;
+                    this.TimelineStory.Seek(TimeSpan.FromMilliseconds(this.SeekSlider.Value));
+                    Debug.WriteLine(SeekSlider.Value);
+                }
+                else
+                {
+                    SeekSlider.Value -= 100;
+                    this.TimelineStory.Seek(TimeSpan.FromMilliseconds(this.SeekSlider.Value));
+                    Debug.WriteLine(SeekSlider.Value);
+                }
+            }
+        }
+
         private void SeekSlider_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.SeekSlider.IsMoveToPointEnabled = true;
