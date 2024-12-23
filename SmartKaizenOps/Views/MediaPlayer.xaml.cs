@@ -179,16 +179,12 @@ namespace SmartKaizenOps.Views
 
         private void SeekSlider_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (this.IsPaused)
-            {
-                this.Play(TimeSpan.FromMilliseconds(this.SeekSlider.Value));
-            }
             this.SeekSlider.IsMoveToPointEnabled = false;
         }
 
         private void SeekSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (this.SeekSlider.IsMoveToPointEnabled)
+            if (this.SeekSlider.IsMoveToPointEnabled || this.IsPaused)
             {
                 this.TimelineStory.Seek(TimeSpan.FromMilliseconds(this.SeekSlider.Value));
             }
