@@ -14,12 +14,13 @@
              PreviewKeyDown="UserControl_PreviewKeyDown">
 
     <UserControl.Resources>
-        <Storyboard x:Key="TimelineStory" Name="TimelineStory" SlipBehavior="Slip">
-            <MediaTimeline Name="Timeline"
+        <Converters:milisecToTimespanConverter x:Key="milisecToTimespanConverter"/>
+        <Storyboard x:Key="TimelineStory" x:Name="TimelineStory" SlipBehavior="Slip">
+            <MediaTimeline x:Name="Timeline"
                            Source="{Binding MovieControler.MoviePath}"
                            Storyboard.TargetName="Media"
-                           BeginTime="{Binding ElementName=Media, Path=Position}"
-                           Duration="{Binding ElementName=Media, Path=NaturalDuration}"
+                           BeginTime="{Binding Position, ElementName=Media}"
+                           Duration="{Binding NaturalDuration, ElementName=Media}"
                            CurrentTimeInvalidated="MediaTimeline_CurrentTimeInvalidated"/>
         </Storyboard>
     </UserControl.Resources>
@@ -61,7 +62,7 @@
                     PreviewMouseLeftButtonUp="SeekSlider_PreviewMouseLeftButtonUp"
                     Value="{Binding MovieControler.MoviePositionValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ValueChanged="SeekSlider_ValueChanged"/>
-                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Text="{Binding Value, ElementName=SeekSlider}"/>
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Text="{Binding Value, ElementName=SeekSlider, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.f}"/>
             </Grid>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal">
@@ -85,7 +86,7 @@
                 </b:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Header="要素名" Binding="{Binding ElementName}"/>
-                    <DataGridTextColumn Header="時間(ミリ秒)" Binding="{Binding MoviePositionValue}"/>
+                    <DataGridTextColumn Header="時間" Binding="{Binding MoviePositionValue, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.f}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Row="1" Orientation="Horizontal">

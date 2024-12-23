@@ -110,8 +110,11 @@ namespace SmartKaizenOps.ViewModels
 
         public void SelectionChanged()
         {
-            this.MovieControler!.MoviePositionValue
-                = this.MovieControler.MovieSliceItems.SelectedItem.MoviePositionValue;
+            if (this.MovieControler != null && this.MovieControler.MovieSliceItems.SelectedItem != null)
+            {
+                this.MovieControler!.MoviePositionValue
+                    = this.MovieControler.MovieSliceItems.SelectedItem.MoviePositionValue;
+            }
         }
 
         public void FileSave()
