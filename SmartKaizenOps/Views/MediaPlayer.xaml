@@ -62,7 +62,7 @@
                     PreviewMouseLeftButtonUp="SeekSlider_PreviewMouseLeftButtonUp"
                     Value="{Binding MovieControler.MoviePositionValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ValueChanged="SeekSlider_ValueChanged"/>
-                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Text="{Binding Value, ElementName=SeekSlider, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.f}"/>
+                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Text="{Binding Value, ElementName=SeekSlider, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.ff}"/>
             </Grid>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal">
@@ -86,7 +86,7 @@
                 </b:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Header="要素名" Binding="{Binding ElementName}"/>
-                    <DataGridTextColumn Header="時間" Binding="{Binding MoviePositionValue, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.f}"/>
+                    <DataGridTextColumn Header="時間" Binding="{Binding MoviePositionValue, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.ff}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Row="1" Orientation="Horizontal">
