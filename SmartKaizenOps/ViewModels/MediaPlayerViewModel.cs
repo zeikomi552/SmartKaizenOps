@@ -63,6 +63,32 @@ namespace SmartKaizenOps.ViewModels
         }
         #endregion
 
+        #region 追加モード
+        /// <summary>
+        /// 追加モード
+        /// </summary>
+        bool _AddMode = true;
+        /// <summary>
+        /// 追加モード
+        /// </summary>
+        public bool AddMode
+        {
+            get
+            {
+                return _AddMode;
+            }
+            set
+            {
+                if (!_AddMode.Equals(value))
+                {
+                    _AddMode = value;
+                    RaisePropertyChanged("AddMode");
+                }
+            }
+        }
+        #endregion
+
+
         #region Movie制御クラス
         /// <summary>
         /// Movie制御クラス
@@ -99,24 +125,61 @@ namespace SmartKaizenOps.ViewModels
 
         public void MouseRightButtonDown()
         {
-            
-            this.MovieControler!.MovieSliceItems.Items.Add(new MovieSliceModel()
-            { 
-                Parent = this.MovieControler!.MovieSliceItems,
-                ElementName = "Element",
-                MoviePositionValue = this.MovieControler.MoviePositionValue,
-                Length = this.MovieControler.MovieLength - this.MovieControler.MoviePositionValue
+            // 追加モード
+            if (this.AddMode)
+            {
+                this.MovieControler!.MovieSliceItems.Items.Add(new MovieSliceModel()
+                {
+                    Parent = this.MovieControler!.MovieSliceItems,
+                    ElementName = "Element",
+                    MoviePositionValue = this.MovieControler.MoviePositionValue,
+                    Length = this.MovieControler.MovieLength - this.MovieControler.MoviePositionValue
+                }
+                );
             }
-            );
+            // 修正モード
+            else
+            {
+                // 修正モードで要素作業が存在しない場合抜ける
+                if (this.MovieControler == null)
+                {
+                    return;
+                }
+
+                // 選択位置を取得
+                int index = this.MovieControler.MovieSliceItems.Items.IndexOf(this.MovieControler.MovieSliceItems.SelectedItem);
+
+                // 選択されていない場合は最初の項目を選択
+                if (index < 0)
+                {
+                    this.MovieControler.MovieSliceItems.SelectedItem = this.MovieControler.MovieSliceItems.Items.ElementAt(0);
+                }
+
+                // 値を修正
+                this.MovieControler.MovieSliceItems.SelectedItem.MoviePositionValue = this.MovieControler.MoviePositionValue;
+            }
 
             for (int i = 0; i < this.MovieControler.MovieSliceItems.Items.Count; i ++)
             {
                 if (this.MovieControler.MovieSliceItems.Items.Count > i + 1)
                 {
-                    this.MovieControler.MovieSliceItems.Items.ElementAt(i).Length 
-                        = this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue - this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
+                    if (this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue < this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue)
+                    {
+                        this.MovieControler.MovieSliceItems.Items.ElementAt(i).Length = 0;
+                        this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue = this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
+                    }
+                    else
+                    {
+                        this.MovieControler.MovieSliceItems.Items.ElementAt(i).Length
+                            = this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue - this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
+                    }
                 }
+                else
+                {
+                    this.MovieControler.MovieSliceItems.Items.ElementAt(i).Length
+                        = this.MovieControler.MovieLength - this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
 
+                }
             }
 
         }

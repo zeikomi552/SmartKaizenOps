@@ -80,18 +80,26 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <DataGrid Margin="5,5,5,5" AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding MovieControler.MovieSliceItems.Items}" SelectedItem="{Binding MovieControler.MovieSliceItems.SelectedItem}">
-                <b:Interaction.Triggers>
-                    <b:EventTrigger EventName="SelectionChanged">
-                        <b:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="SelectionChanged"/>
-                    </b:EventTrigger>
-                </b:Interaction.Triggers>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="開始位置" Binding="{Binding MoviePositionValue, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.ff}"/>
-                    <DataGridTextColumn Width="*" Header="要素名" Binding="{Binding ElementName}"/>
-                    <DataGridTextColumn Header="差(秒)" Binding="{Binding Length, Converter={StaticResource doubleTo1000BunnoIchiConverter}, StringFormat=0.00}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <CheckBox Margin="5" Content="追加モード" IsChecked="{Binding AddMode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGrid Margin="5,5,5,5" AutoGenerateColumns="False" CanUserAddRows="False"
+                          ItemsSource="{Binding MovieControler.MovieSliceItems.Items}" SelectedItem="{Binding MovieControler.MovieSliceItems.SelectedItem}" Grid.Row="1">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="SelectionChanged">
+                            <b:CallMethodAction TargetObject="{Binding Mode=OneWay}" MethodName="SelectionChanged"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="開始位置" Binding="{Binding MoviePositionValue, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.ff}"/>
+                        <DataGridTextColumn Width="*" Header="要素名" Binding="{Binding ElementName}"/>
+                        <DataGridTextColumn Header="差(秒)" Binding="{Binding Length, Converter={StaticResource doubleTo1000BunnoIchiConverter}, StringFormat=0.00}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal">
                 <Button Margin="5" Content="保存">
                     <b:Interaction.Triggers>
