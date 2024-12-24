@@ -14,6 +14,7 @@
              PreviewKeyDown="UserControl_PreviewKeyDown">
 
     <UserControl.Resources>
+        <Converters:doubleTo1000BunnoIchiConverter x:Key="doubleTo1000BunnoIchiConverter"/>
         <Converters:milisecToTimespanConverter x:Key="milisecToTimespanConverter"/>
         <Storyboard x:Key="TimelineStory" x:Name="TimelineStory" SlipBehavior="Slip">
             <MediaTimeline x:Name="Timeline"
@@ -87,6 +88,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="*" Header="要素名" Binding="{Binding ElementName}"/>
                     <DataGridTextColumn Header="時間" Binding="{Binding MoviePositionValue, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.ff}"/>
+                    <DataGridTextColumn Header="差(秒)" Binding="{Binding Length, Converter={StaticResource doubleTo1000BunnoIchiConverter}, StringFormat=0.00}"/>
                 </DataGrid.Columns>
             </DataGrid>
             <StackPanel Grid.Row="1" Orientation="Horizontal">

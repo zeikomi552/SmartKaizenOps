@@ -99,11 +99,14 @@ namespace SmartKaizenOps.ViewModels
 
         public void MouseRightButtonDown()
         {
+            
             this.MovieControler!.MovieSliceItems.Items.Add(new MovieSliceModel()
             { 
                 Parent = this.MovieControler!.MovieSliceItems,
                 ElementName = "Element",
-                MoviePositionValue = this.MovieControler.MoviePositionValue
+                MoviePositionValue = this.MovieControler.MoviePositionValue,
+                Length = this.MovieControler!.MovieSliceItems.Items.Count > 0 
+                ? this.MovieControler.MoviePositionValue - this.MovieControler!.MovieSliceItems.Items.Last().MoviePositionValue : this.MovieControler.MoviePositionValue
             }
             );
         }

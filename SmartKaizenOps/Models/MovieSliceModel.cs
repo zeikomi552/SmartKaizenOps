@@ -66,11 +66,11 @@ namespace SmartKaizenOps.Models
         /// <summary>
         /// 長さ
         /// </summary>
-        decimal _Length = 0;
+        double _Length = 0;
         /// <summary>
         /// 長さ
         /// </summary>
-        public decimal Length
+        public double Length
         {
             get
             {
