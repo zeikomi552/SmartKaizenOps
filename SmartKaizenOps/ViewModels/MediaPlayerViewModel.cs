@@ -105,10 +105,20 @@ namespace SmartKaizenOps.ViewModels
                 Parent = this.MovieControler!.MovieSliceItems,
                 ElementName = "Element",
                 MoviePositionValue = this.MovieControler.MoviePositionValue,
-                Length = this.MovieControler!.MovieSliceItems.Items.Count > 0 
-                ? this.MovieControler.MoviePositionValue - this.MovieControler!.MovieSliceItems.Items.Last().MoviePositionValue : this.MovieControler.MoviePositionValue
+                Length = this.MovieControler.MovieLength - this.MovieControler.MoviePositionValue
             }
             );
+
+            for (int i = 0; i < this.MovieControler.MovieSliceItems.Items.Count; i ++)
+            {
+                if (this.MovieControler.MovieSliceItems.Items.Count > i + 1)
+                {
+                    this.MovieControler.MovieSliceItems.Items.ElementAt(i).Length 
+                        = this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue - this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
+                }
+
+            }
+
         }
 
         public void SelectionChanged()

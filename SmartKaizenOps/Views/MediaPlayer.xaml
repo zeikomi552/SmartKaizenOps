@@ -62,8 +62,9 @@
                     PreviewMouseLeftButtonDown="SeekSlider_PreviewMouseLeftButtonDown" 
                     PreviewMouseLeftButtonUp="SeekSlider_PreviewMouseLeftButtonUp"
                     Value="{Binding MovieControler.MoviePositionValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Maximum="{Binding MovieControler.MovieLength, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     ValueChanged="SeekSlider_ValueChanged"/>
-                <TextBlock TextAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Text="{Binding Value, ElementName=SeekSlider, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.ff}"/>
+                <TextBlock Foreground="Red" TextAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Text="{Binding Value, ElementName=SeekSlider, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.ff}"/>
             </Grid>
 
             <StackPanel Grid.Row="2" Orientation="Horizontal">
@@ -86,8 +87,8 @@
                     </b:EventTrigger>
                 </b:Interaction.Triggers>
                 <DataGrid.Columns>
+                    <DataGridTextColumn Header="開始位置" Binding="{Binding MoviePositionValue, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.ff}"/>
                     <DataGridTextColumn Width="*" Header="要素名" Binding="{Binding ElementName}"/>
-                    <DataGridTextColumn Header="時間" Binding="{Binding MoviePositionValue, Converter={StaticResource milisecToTimespanConverter},StringFormat=hh\\:mm\\:ss\\.ff}"/>
                     <DataGridTextColumn Header="差(秒)" Binding="{Binding Length, Converter={StaticResource doubleTo1000BunnoIchiConverter}, StringFormat=0.00}"/>
                 </DataGrid.Columns>
             </DataGrid>

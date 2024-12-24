@@ -15,5 +15,7 @@ namespace SmartKaizenOps.Models
         public MovieSliceCollectionModel MovieSliceItems { get; set; }
 
         public double MoviePositionValue { get; set; }
+
+        public double MovieLength { get; set; }
     }
 }

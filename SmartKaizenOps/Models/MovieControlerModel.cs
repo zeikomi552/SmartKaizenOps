@@ -91,6 +91,33 @@ namespace SmartKaizenOps.Models
         }
         #endregion
 
+        #region 動画の長さ(ミリ秒)
+        /// <summary>
+        /// 動画の長さ(ミリ秒)
+        /// </summary>
+        double _MovieLength = 0.0;
+        /// <summary>
+        /// 動画の長さ(ミリ秒)
+        /// </summary>
+        public double MovieLength
+        {
+            get
+            {
+                return _MovieLength;
+            }
+            set
+            {
+                if (!_MovieLength.Equals(value))
+                {
+                    _MovieLength = value;
+                    RaisePropertyChanged("MovieLength");
+                }
+            }
+        }
+        #endregion
+
+
+
         [XmlIgnore]
         public DelegateCommand? ExecuteFileOpenCommand { get; set; }
 
