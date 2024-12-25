@@ -128,14 +128,39 @@ namespace SmartKaizenOps.ViewModels
             // 追加モード
             if (this.AddMode)
             {
-                this.MovieControler!.MovieSliceItems.Items.Add(new MovieSliceModel()
+                int maxSize = this.MovieControler!.MovieSliceItems.Items.Count;
+
+                if (maxSize != 0)
                 {
-                    Parent = this.MovieControler!.MovieSliceItems,
-                    ElementName = "Element",
-                    MoviePositionValue = this.MovieControler.MoviePositionValue,
-                    Length = this.MovieControler.MovieLength - this.MovieControler.MoviePositionValue
+                    for (int i = 0; i < maxSize; i++)
+                    {
+                        double currentPosition = this.MovieControler.MoviePositionValue;
+                        double indexPosision = this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
+                        double nextPosision = i + 1 < maxSize ? this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue : this.MovieControler.MovieLength;
+
+                        if (indexPosision < currentPosition && currentPosition <= nextPosision)
+                        {
+                            this.MovieControler!.MovieSliceItems.Items.Insert(i+1, (new MovieSliceModel()
+                            {
+                                Parent = this.MovieControler!.MovieSliceItems,
+                                ElementName = "Element",
+                                MoviePositionValue = this.MovieControler.MoviePositionValue,
+                                Length = 0
+                            }));
+                        }
+                    }
                 }
-                );
+                else
+                {
+                    this.MovieControler!.MovieSliceItems.Items.Add(new MovieSliceModel()
+                    {
+                        Parent = this.MovieControler!.MovieSliceItems,
+                        ElementName = "Element",
+                        MoviePositionValue = this.MovieControler.MoviePositionValue,
+                        Length = 0
+                    }
+);
+                }
             }
             // 修正モード
             else
@@ -159,27 +184,30 @@ namespace SmartKaizenOps.ViewModels
                 this.MovieControler.MovieSliceItems.SelectedItem.MoviePositionValue = this.MovieControler.MoviePositionValue;
             }
 
-            for (int i = 0; i < this.MovieControler.MovieSliceItems.Items.Count; i ++)
+            for (int i = 0; i < this.MovieControler.MovieSliceItems.Items.Count; i++)
             {
                 if (this.MovieControler.MovieSliceItems.Items.Count > i + 1)
                 {
-                    if (this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue < this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue)
+                    double nextPosition = this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue;
+                    double indexPosition = this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
+
+                    if (nextPosition < indexPosition)
                     {
                         this.MovieControler.MovieSliceItems.Items.ElementAt(i).Length = 0;
-                        this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue = this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
+                        nextPosition = indexPosition;
                     }
                     else
                     {
                         this.MovieControler.MovieSliceItems.Items.ElementAt(i).Length
-                            = this.MovieControler.MovieSliceItems.Items.ElementAt(i + 1).MoviePositionValue - this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
+                            = nextPosition - indexPosition;
                     }
                 }
-                else
-                {
-                    this.MovieControler.MovieSliceItems.Items.ElementAt(i).Length
-                        = this.MovieControler.MovieLength - this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
+                //else
+                //{
+                //    this.MovieControler.MovieSliceItems.Items.ElementAt(i).Length
+                //        = this.MovieControler.MovieLength - this.MovieControler.MovieSliceItems.Items.ElementAt(i).MoviePositionValue;
 
-                }
+                //}
             }
 
         }
