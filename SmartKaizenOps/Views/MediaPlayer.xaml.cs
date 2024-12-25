@@ -114,7 +114,10 @@ namespace SmartKaizenOps.Views
 
         private void Media_MediaOpened(object sender, EventArgs e)
         {
-            this.SeekSlider.Maximum = this.Media.NaturalDuration.TimeSpan.TotalMilliseconds;
+            if (this.Media.NaturalDuration.HasTimeSpan)
+            {
+                this.SeekSlider.Maximum = this.Media.NaturalDuration.TimeSpan.TotalMilliseconds;
+            }
             this.Play();
         }
 
@@ -146,7 +149,7 @@ namespace SmartKaizenOps.Views
 
         private void Media_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if (this.IsStopped == false && this.IsPaused)
+            if (this.IsStopped || this.IsPaused)
             {
                 if (e.Delta > 0)
                 {

@@ -133,7 +133,7 @@ namespace SmartKaizenOps.Models
                 var dialog = new OpenFileDialog();
 
                 // ファイルの種類を設定
-                dialog.Filter = "動画ファイル (*.mkv)|*.mkv|全てのファイル (*.*)|*.*";
+                dialog.Filter = "動画ファイル (*.mkv;*.mp4;*.wmv)|*.mkv;*.mp4;*.wmv|全てのファイル (*.*)|*.*";
 
                 // ダイアログを表示する
                 if (dialog.ShowDialog() == true)

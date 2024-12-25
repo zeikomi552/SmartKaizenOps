@@ -20,8 +20,6 @@
             <MediaTimeline x:Name="Timeline"
                            Source="{Binding MovieControler.MoviePath}"
                            Storyboard.TargetName="Media"
-                           BeginTime="{Binding Position, ElementName=Media}"
-                           Duration="{Binding NaturalDuration, ElementName=Media}"
                            CurrentTimeInvalidated="MediaTimeline_CurrentTimeInvalidated"/>
         </Storyboard>
     </UserControl.Resources>
