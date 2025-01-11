@@ -117,6 +117,7 @@ namespace SmartKaizenOps.Views
             if (this.Media.NaturalDuration.HasTimeSpan)
             {
                 this.SeekSlider.Maximum = this.Media.NaturalDuration.TimeSpan.TotalMilliseconds;
+                this.Media.LoadedBehavior = MediaState.Manual;
             }
             this.Play();
         }
@@ -255,6 +256,7 @@ namespace SmartKaizenOps.Views
 
         public void Pause()
         {
+            this.Media.Pause();
             this.TimelineStory.Pause();
         }
 
